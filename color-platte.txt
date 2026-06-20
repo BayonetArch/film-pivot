@@ -1,0 +1,5 @@
+https://colorhunt.co/palette/1118444b56947288aeeae0cf
+rgb(17, 24, 68)
+rgb(75, 86, 148)
+rgb(114, 136, 174)
+rgb(234, 224, 207)

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="vie/port" content="width=device-width, initial-scale=1" />
+    <title>Movie Lister</title>
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="script/index.js" type="module" defer></script>
+  </head>
+  <body>
+    <form id="search-form">
+      <div class="search-wrap">
+        <input
+          type="text"
+          name="Search"
+          placeholder="search for movies... "
+          id="search"
+          autofocus
+        />
+        <svg
+          class="search-icon"
+          id="search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+    </form>
+    <div class="loader" id="loader"></div>
+    <div id="res_wrapper">
+      <div id="result"></div>
+    </div>
+    <div id="error"></div>
+    <!-- <img src="./assets/no-poster.svg" alt="no poster found"> -->
+  </body>
+</html>
