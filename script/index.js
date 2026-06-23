@@ -1,4 +1,4 @@
-const KEY = "";
+import { KEY as OMDB_API_KEY } from "../ignore/ignore.js";
 
 const searchForm = document.getElementById("search-form");
 const search = document.getElementById("search");
@@ -6,6 +6,7 @@ const searchIcon = document.getElementById("search-icon");
 const result = document.getElementById("result");
 const loader = document.getElementById("loader");
 const error = document.getElementById("error");
+const themeSwitcher = document.getElementById("theme-switcher");
 
 function cancelErrorAnimations() {
   error.getAnimations().forEach((anim) => anim.cancel());
@@ -35,6 +36,27 @@ const slideOut = [
 
 const animationOptions = { duration: 500, easing: "ease", fill: "forwards" };
 
+result.addEventListener("click", (e) => {
+  const card = e.target.closest(".movie-card");
+  const imdbID = card.querySelector(".imdb-id").textContent;
+  console.log(imdbID);
+});
+
+async function _fetchApi(url = "") {
+  const res = await fetch(url);
+  const data = await res.json();
+  if (data.Response === "False") {
+    result.innerHTML = "";
+    error.innerText = `Error: ${data.Error}`;
+    animateError(slideIn);
+    setTimeout(() => {
+      animateError(slideOut);
+    }, 4000);
+    return;
+  }
+  error.innerHTML = "";
+}
+
 function animateError(anim = []) {
   cancelErrorAnimations();
   error.animate(anim, animationOptions);
@@ -60,11 +82,26 @@ searchForm.onsubmit = async (e) => {
 };
 searchIcon.addEventListener("click", () => handleSearch());
 
+themeSwitcher.addEventListener("click", () => {
+  document.documentElement.classList.toggle("light");
+  localStorage.setItem(
+    "theme",
+    document.documentElement.classList.contains("light") ? "light" : "dark",
+  );
+});
+
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "light") 
+  document.documentElement.classList.add("light");
+
+
 async function searchMovies(name = "") {
   let searchArray = [];
 
   try {
-    const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${name}`);
+    const res = await fetch(
+      `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${name}`,
+    );
     const data = await res.json();
     if (data.Response === "False") {
       result.innerHTML = "";
@@ -100,10 +137,14 @@ async function displayMovies(movies = [{}]) {
       else poster = obj.Poster;
 
       return `<div class= "movie-card">
-    <img src='${poster}' class='movie-poster' alt="poster of movie ${obj.Title}">
+    <img src='${poster}' class='movie-poster' alt="poster of movie ${obj.Title}"
+      onerror="this.onerror=null;this.src='../assets/no-poster.svg'" 
+        >
         <div class="details-wrapper">
         <div class="movie-title">${obj.Title}</div>
+        <div class="type">${obj.Type}</div>
         <div class="movie-year">${obj.Year}</div>
+        <span class="imdb-id">${obj.imdbID}</span>
     </div>
       </div>`;
     })
